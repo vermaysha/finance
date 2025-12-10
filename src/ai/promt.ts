@@ -21,7 +21,7 @@ Tugas Utama:
 Output Wajib JSON dengan skema berikut:
 {
   "is_transaction": boolean (true jika ada data keuangan, false jika hanya ngobrol),
-  "reply_text": "string" (balasan ramah untuk user, gunakan Bahasa Indonesia santai, sertakan juga nilai, kategori, dll jika ada data transaksi. Jangan gunakan tanda tanya apabila tidak perlu),
+  "reply_text": "string" (balasan ramah untuk user, gunakan Bahasa Indonesia santai, sertakan juga nilai dalam format rupiah, kategori, dll jika ada data transaksi. Jangan gunakan tanda tanya apabila tidak perlu),
   "transaction_data": {
      // Isi object ini HANYA jika is_transaction = true. Jika false, isi null.
      "type": "PENGELUARAN" | "PEMASUKAN",
