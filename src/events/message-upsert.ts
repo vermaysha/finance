@@ -60,6 +60,7 @@ export const messageUpsert = async (sock: WASocket, message: WAMessage) => {
           data: buffer.toString('base64'),
           mimeType: mimeType,
         },
+        message: msg.imageMessage.caption || undefined,
       };
     } catch (error) {
       console.error('Gagal mengunduh pesan gambar:', error);
