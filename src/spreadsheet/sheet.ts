@@ -33,8 +33,7 @@ export const saveToSheetDirect = async (data: IAIResponse) => {
   ];
 
   try {
-    const client = await auth.getClient();
-    const googleSheets = google.sheets({ version: 'v4', auth: client as any });
+    const googleSheets = google.sheets({ version: 'v4', auth: auth });
 
     await googleSheets.spreadsheets.values.append({
       spreadsheetId: SPREADSHEET_ID,
