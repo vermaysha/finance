@@ -6,13 +6,32 @@ import {
 } from 'baileys';
 import { generateResponse, type IBotMessage } from '../ai/ai';
 
+const allowedIds = process.env.ALLOWED_USER_IDS
+  ? process.env.ALLOWED_USER_IDS.split(',').map((id) =>
+      id.trim().replace(/[^0-9]/g, ''),
+    )
+  : [];
+
 export const messageUpsert = async (sock: WASocket, message: WAMessage) => {
   const keyId = message.key.id;
   const remoteJid = message.key.remoteJid;
+  const phoneNumber =
+    message.key.remoteJidAlt?.replace(/[^0-9]/g, '') ??
+    message.key.participantAlt?.replace(/[^0-9]/g, '') ??
+    null;
 
   if (!keyId || !remoteJid) return;
 
   if (message.key.fromMe) return;
+
+  if (
+    phoneNumber &&
+    allowedIds.length > 0 &&
+    !allowedIds.includes(phoneNumber)
+  ) {
+    console.log(`User ID ${phoneNumber} tidak diizinkan.`);
+    return;
+  }
 
   await sock.sendPresenceUpdate('available', remoteJid);
 
