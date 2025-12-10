@@ -2,7 +2,7 @@
 
 ## Tujuan ?
 
-Karena aku malas harus buka aplikasi lain, mending langsung buka WANGSAP. Kan enak tinggal SS/Foto kirim AI, biarkan **AI KERJA** biar aku bisa **NGAPAIN lah**
+Karena malas harus buka aplikasi lain, mending langsung buka WANGSAP. Kan enak tinggal SS/Foto kirim AI, biarkan **AI KERJA** biar bisa **NGAPAIN** gitu
 
 ## Fitur
 
@@ -24,7 +24,7 @@ Buka `releases` terus tinggal jalanin aja. Ngga mau ? tinggal clone aja nih repo
 
 ### Ngebug ? Error ?
 
-Benerin aja lah sendiri aku kadang malas.
+Benerin aja lah sendiri atau open `issue` aja, kalau ngga malas bakal kubales.
 
 ### Apakah Data Keuanganku AMAN ??
 
