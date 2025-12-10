@@ -1,0 +1,32 @@
+{
+  "name": "finance",
+  "description": "Catat Keuangan dengan AI",
+  "version": "0.0.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.7.4"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "bundle": "bun ./scripts/build.ts",
+    "format": "bunx prettier . --write",
+    "prepare": "husky"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@google/genai": "^1.32.0",
+    "baileys": "^7.0.0-rc.9",
+    "googleapis": "^168.0.0",
+    "uqr": "^0.1.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
