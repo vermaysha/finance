@@ -1,6 +1,10 @@
 const path = Bun.env.DATABASE_URL || 'file:./data/baileys.db';
 export const sql = new Bun.SQL(path);
 
+if (sql.options.adapter !== 'sqlite') {
+  throw new Error('Database adapter harus SQLite.');
+}
+
 export const startMigration = async () => {
   await sql`PRAGMA journal_mode = WAL;`;
   await sql`PRAGMA foreign_keys = OFF;`;
