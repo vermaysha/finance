@@ -1,5 +1,5 @@
 module.exports = {
-  title: "Finance",
+  name: "Finance",
   script: "src/index.ts",
   interpreter: "bun",
   env: {
