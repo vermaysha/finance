@@ -7,7 +7,7 @@ mkdirSync('./out', { recursive: true });
 const platforms: Bun.CompileBuildOptions[] = [
   { target: 'bun-windows-x64', outfile: `finance-windows-${version}.exe` },
   { target: 'bun-linux-x64', outfile: `finance-linux-${version}` },
-  { target: 'bun-darwin-arm64', outfile: 'finance-macos' },
+  { target: 'bun-darwin-arm64', outfile: `finance-macos-${version}` },
 ];
 
 for (const platform of platforms) {
