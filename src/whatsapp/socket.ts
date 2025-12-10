@@ -20,13 +20,16 @@ import makeWASocket, {
   type WASocket,
   type WAMessage,
   isLidUser,
+  BufferJSON,
+  proto,
 } from 'baileys';
 import { sleep } from 'bun';
 import PQueue from 'p-queue';
 import P from 'pino';
 import { useStorage } from './storage';
 import { renderANSI, renderUnicodeCompact } from 'uqr';
-import { messageUpsert } from '../events';
+import { groupUpsert, messageUpsert } from '../events';
+import { sql } from '../db';
 
 const msgRetryCounterCache = new NodeCache({
   stdTTL: 60 * 60, // 1 hour
@@ -63,7 +66,7 @@ export const startSocket = async () => {
     },
   });
 
-  // sessionCache.flushAll();
+  sessionCache.flushAll();
 
   const { state, saveCreds, clearCreds } = await useStorage();
 
@@ -88,23 +91,38 @@ export const startSocket = async () => {
     shouldIgnoreJid: (jid) => {
       return !(isPnUser(jid) || isLidUser(jid));
     },
-    // cachedGroupMetadata: async (jid) => {
-    //   const group = await GroupTable.get(jid);
-    //   if (group) {
-    //     return group;
-    //   }
-    // },
-    // getMessage: async (key) => {
-    //   const id = key.id;
-    //   const remoteJid = key.remoteJid;
+    cachedGroupMetadata: async (id) => {
+      const results =
+        await sql`SELECT data FROM groups WHERE id = ${id} LIMIT 1;`;
+      const row = results[0]?.data;
 
-    //   if (!id || !remoteJid) return undefined;
-    //   const msg = await MessageTable.get(id, remoteJid, this.deviceId);
+      if (!row) return null;
 
-    //   if (msg?.message) {
-    //     return msg.message;
-    //   }
-    // },
+      const group = JSON.parse(row, BufferJSON.reviver);
+
+      if (!group) return null;
+
+      return group;
+    },
+    getMessage: async (key) => {
+      const id = key.id;
+      const remoteJid = key.remoteJid;
+
+      if (!id || !remoteJid) return undefined;
+
+      const results =
+        await sql`SELECT data FROM messages WHERE id = ${remoteJid}-${id} LIMIT 1;`;
+      const row = results[0]?.data;
+
+      if (!row) return undefined;
+
+      const message = JSON.parse(row, BufferJSON.reviver);
+      const data = proto.Message.create(message);
+
+      if (!data) return undefined;
+
+      return data;
+    },
   });
 
   sock.ev.on('messages.upsert', ({ messages, type }) => {
@@ -113,6 +131,24 @@ export const startSocket = async () => {
     );
 
     for (const message of messages) {
+      messageUpsert(sock, message);
+    }
+  });
+
+  sock.ev.on('groups.upsert', (groups) => {
+    console.log(`[Whatsapp] Received ${groups.length} group updates`);
+
+    for (const group of groups) {
+      groupUpsert(sock, group);
+    }
+  });
+
+  sock.ev.on('messaging-history.set', (history) => {
+    console.log(
+      `[Whatsapp] Received messaging history with ${history.messages.length} messages`,
+    );
+
+    for (const message of history.messages) {
       messageUpsert(sock, message);
     }
   });

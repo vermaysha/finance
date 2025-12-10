@@ -20,6 +20,20 @@ export const startMigration = async () => {
     "updated_at" INTEGER DEFAULT (unixepoch()) NOT NULL
   ) STRICT;`;
 
+  await sql`CREATE TABLE IF NOT EXISTS "groups" (
+    "id" TEXT PRIMARY KEY,
+    "data" TEXT NOT NULL,
+    "created_at" INTEGER DEFAULT (unixepoch()) NOT NULL,
+    "updated_at" INTEGER DEFAULT (unixepoch()) NOT NULL
+  ) STRICT;`;
+
+  await sql`CREATE TABLE IF NOT EXISTS "messages" (
+    "id" TEXT PRIMARY KEY,
+    "data" TEXT NOT NULL,
+    "created_at" INTEGER DEFAULT (unixepoch()) NOT NULL,
+    "updated_at" INTEGER DEFAULT (unixepoch()) NOT NULL
+  ) STRICT;`;
+
   await sql`CREATE TABLE IF NOT EXISTS "transactions" (
     id INTEGER PRIMARY KEY,
     type TEXT NOT NULL,

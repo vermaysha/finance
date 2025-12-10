@@ -1,10 +1,12 @@
 import {
+  BufferJSON,
   downloadMediaMessage,
   normalizeMessageContent,
   type WAMessage,
   type WASocket,
 } from 'baileys';
 import { generateResponse, type IBotMessage } from '../ai/ai';
+import { sql } from '../db';
 
 const allowedIds = process.env.ALLOWED_USER_IDS
   ? process.env.ALLOWED_USER_IDS.split(',').map((id) =>
@@ -24,6 +26,39 @@ export const messageUpsert = async (sock: WASocket, message: WAMessage) => {
 
   if (message.key.fromMe) return;
 
+  await Promise.all([
+    saveMessage(message, keyId, remoteJid),
+    handleBotMessage(sock, message, remoteJid, phoneNumber),
+  ]);
+};
+
+const saveMessage = async (
+  message: WAMessage,
+  keyId: string,
+  remoteJid: string,
+) => {
+  const data = {
+    id: `${remoteJid}-${keyId}`,
+    data: JSON.stringify(message.message, BufferJSON.replacer),
+  };
+
+  return await sql`INSERT INTO
+    messages ${sql(data)}
+  ON CONFLICT (id)
+  DO UPDATE SET
+    data = EXCLUDED.data,
+    updated_at = unixepoch();
+  `;
+};
+
+const handleBotMessage = async (
+  sock: WASocket,
+  message: WAMessage,
+  remoteJid: string,
+  phoneNumber: string | null,
+) => {
+  const msg = normalizeMessageContent(message.message);
+
   if (
     phoneNumber &&
     allowedIds.length > 0 &&
@@ -37,7 +72,6 @@ export const messageUpsert = async (sock: WASocket, message: WAMessage) => {
 
   Bun.sleep(1000);
 
-  const msg = normalizeMessageContent(message.message);
   let bot: IBotMessage | null = null;
   let response: string | null = null;
 
