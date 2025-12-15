@@ -1,5 +1,5 @@
 export const DATABASE_URL = Bun.env.DATABASE_URL || 'file:./data/baileys.db';
-export const GEMINI_MODEL = Bun.env.GEMINI_MODEL || 'gemini-2.0-flash';
+export const GEMINI_MODEL = Bun.env.GEMINI_MODEL || 'gemini-2.0-flash-lite';
 export const GEMINI_HOST = Bun.env.GEMINI_HOST;
 export const GEMINI_API_KEY = Bun.env.GEMINI_API_KEY;
 

@@ -5,20 +5,13 @@ export const SPREADSHEET_ID = Bun.env.SPREADSHEET_ID;
 export const GCLOUD_KEY_PATH = Bun.env.GCLOUD_KEY_PATH;
 export const SHEET_NAME = Bun.env.SHEET_NAME || 'Logs';
 
-if (!SPREADSHEET_ID) {
-  throw new Error('Spreadsheet ID tidak ditemukan di environment variables.');
-}
-
-if (!GCLOUD_KEY_PATH) {
-  throw new Error('Key file path tidak ditemukan di environment variables.');
-}
-
 const auth = new google.auth.GoogleAuth({
   keyFile: GCLOUD_KEY_PATH,
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
 export const saveToSheetDirect = async (data: IAIResponse) => {
+  if (!SPREADSHEET_ID || !GCLOUD_KEY_PATH) return;
   if (!data.is_transaction || !data.transaction_data) return;
 
   const t = data.transaction_data;

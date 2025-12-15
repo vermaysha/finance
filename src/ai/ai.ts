@@ -6,7 +6,7 @@ import {
 } from './promt';
 import { getDailySummary, getTotalBalance, getTransactions, sql } from '../db';
 import { saveToSheetDirect } from '../spreadsheet';
-import { GEMINI_API_KEY, GEMINI_HOST } from '../config';
+import { GEMINI_API_KEY, GEMINI_HOST, GEMINI_MODEL } from '../config';
 
 export interface IBotMessage {
   message?: string;
@@ -87,7 +87,7 @@ ${latestExpense
   .join('\n')}`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
+    model: GEMINI_MODEL,
     contents: contents,
     config: {
       systemInstruction: systemInstructions + additionalContexts,
