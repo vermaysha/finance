@@ -71,7 +71,9 @@ export const startSocket = async () => {
   const { state, saveCreds, clearCreds } = await useStorage();
 
   const { version, isLatest } = await fetchLatestBaileysVersion();
-  console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`);
+  console.log(
+    `[Whatsapp] using WA v${version.join('.')}, isLatest: ${isLatest}`,
+  );
 
   const sock = makeWASocket({
     version,
@@ -174,14 +176,14 @@ export const startSocket = async () => {
       ).toLowerCase();
 
       if (statusMsg.includes('qr refs attempts ended')) {
-        console.log('QR attempts ended');
+        console.log('[Whatsapp] QR attempts ended');
         cleanup();
         clearCreds();
         return Bun.sleep(1000).then(() => process.exit(1));
       }
 
       if (statusMsg.includes('proxy connection timed out')) {
-        console.log('Proxy connection timed out');
+        console.log('[Whatsapp] Proxy connection timed out');
         cleanup();
         clearCreds();
         return Bun.sleep(1000).then(() => process.exit(1));
@@ -191,7 +193,7 @@ export const startSocket = async () => {
         statusMsg.includes('websocket error') &&
         statusMsg.includes('failed to connect')
       ) {
-        console.log('Failed to connect to whatsapp websocket,');
+        console.log('[Whatsapp] Failed to connect to whatsapp websocket,');
 
         return Bun.sleep(3000).then(() => {
           cleanup();
@@ -221,7 +223,7 @@ export const startSocket = async () => {
 
       if (restartedCodes.includes(statusCode)) {
         console.log(
-          `Connection closed, restarting (${statusCode} - ${statusMsg})`,
+          `[Whatsapp] Connection closed, restarting (${statusCode} - ${statusMsg})`,
         );
         cleanup();
         return startSocket();
@@ -229,14 +231,16 @@ export const startSocket = async () => {
 
       if (loggedOutCodes.includes(statusCode)) {
         console.log(
-          `Connection closed, logged out (${statusCode} - ${statusMsg})`,
+          `[Whatsapp] Connection closed, logged out (${statusCode} - ${statusMsg})`,
         );
         clearCreds();
         cleanup();
         return Bun.sleep(1000).then(() => process.exit(1));
       }
 
-      console.log(`Connection closed due to ${lastDisconnect?.error}`);
+      console.log(
+        `[Whatsapp] Connection closed due to ${lastDisconnect?.error}`,
+      );
 
       cleanup();
       clearCreds();

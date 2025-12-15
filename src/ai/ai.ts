@@ -6,6 +6,7 @@ import {
 } from './promt';
 import { sql } from '../db';
 import { saveToSheetDirect } from '../spreadsheet';
+import { GEMINI_API_KEY, GEMINI_HOST } from '../config';
 
 export interface IBotMessage {
   message?: string;
@@ -15,14 +16,18 @@ export interface IBotMessage {
   } | null;
 }
 
-const GEMINI_API_KEY = Bun.env.GEMINI_API_KEY;
 const systemInstructions = SYSTEM_PROMPT;
 
 if (!GEMINI_API_KEY) {
   throw new Error('GEMINI_API_KEY is not set in environment variables');
 }
 
-export const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+export const ai = new GoogleGenAI({
+  apiKey: GEMINI_API_KEY,
+  httpOptions: {
+    baseUrl: GEMINI_HOST,
+  },
+});
 
 export const generateResponse = async (msg: IBotMessage | string) => {
   const contents: ContentListUnion = [];

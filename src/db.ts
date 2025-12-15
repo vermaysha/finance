@@ -1,4 +1,6 @@
-const path = Bun.env.DATABASE_URL || 'file:./data/baileys.db';
+import { DATABASE_URL } from './config';
+
+const path = DATABASE_URL;
 export const sql = new Bun.SQL(path);
 
 if (sql.options.adapter !== 'sqlite') {
@@ -38,7 +40,7 @@ export const startMigration = async () => {
     id INTEGER PRIMARY KEY,
     type TEXT NOT NULL,
     category TEXT,
-    amount INTEGER NOT NULL,
+    amount REAL NOT NULL,
     date TEXT NOT NULL,
     description TEXT,
     merchant_or_sender TEXT,

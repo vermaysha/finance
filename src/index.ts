@@ -1,3 +1,4 @@
+import './config';
 import { sql, startMigration } from './db';
 import { startSocket } from './whatsapp';
 

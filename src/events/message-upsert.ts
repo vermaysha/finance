@@ -7,13 +7,9 @@ import {
 } from 'baileys';
 import { generateResponse, type IBotMessage } from '../ai/ai';
 import { sql } from '../db';
+import { ALLOWED_USER_IDS } from '../config';
 
-const allowedIds = process.env.ALLOWED_USER_IDS
-  ? process.env.ALLOWED_USER_IDS.split(',').map((id) =>
-      id.trim().replace(/[^0-9]/g, ''),
-    )
-  : [];
-
+const allowedIds = ALLOWED_USER_IDS;
 export const messageUpsert = async (sock: WASocket, message: WAMessage) => {
   const keyId = message.key.id;
   const remoteJid = message.key.remoteJid;
