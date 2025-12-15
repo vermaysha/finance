@@ -10,7 +10,8 @@ Melakukan klasifikasi untuk gambar atau text yang masuk apakah pemasukan atau pe
 
 ## Model
 
-Menggunakan model `gemini-2.0-flash`. Biar apa ? **biar murah**.
+Menggunakan model `gemini-2.0-flash-lite`. Biar apa ? **biar murah**.
+Berdasarkan data dari [https://aistudio.google.com/](https://aistudio.google.com/) model `gemini-2.5-flash-lite` itu yang masih gratis dengan 10 RPM, 250K TPM, dan 20RPD.
 
 ## FAQ
 
