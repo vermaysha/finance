@@ -23,7 +23,7 @@
   "dependencies": {
     "@google/genai": "^1.40.0",
     "baileys": "^7.0.0-rc.9",
-    "googleapis": "^168.0.0",
+    "googleapis": "^171.2.0",
     "uqr": "^0.1.2"
   },
   "lint-staged": {
