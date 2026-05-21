@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.52.0",
-    "baileys": "^7.0.0-rc11",
+    "baileys": "^7.0.0-rc12",
     "googleapis": "^168.0.0",
     "uqr": "^0.1.3"
   },
