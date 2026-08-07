@@ -69,7 +69,7 @@ jobs:
           NODE_ENV=production bun ./scripts/build.ts
 
       - name: Create GitHub Release and Upload Assets
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.tag_version.outputs.new_version_tag }}
           name: Release ${{ steps.tag_version.outputs.new_version_tag }}
